@@ -1,4 +1,4 @@
-# Django settings for app project.
+# Django settings for mysite project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -78,7 +78,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '@!fgpul8#5+(01x_hrmth60)))hg#-f2k$(2@u!cuuj^4+nnb^'
+SECRET_KEY = '!#2h0&amp;k0#0tk0c*ve^07w9*q+t5ur&amp;kxcje(**)ej0a^q9d25t'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -97,10 +97,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'app.urls'
+ROOT_URLCONF = 'mysite.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'app.wsgi.application'
+WSGI_APPLICATION = 'mysite.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
