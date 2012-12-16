@@ -1,1 +1,11 @@
+*.DS_Store
+*.bak
+*.log
 *.pyc
+*.sqlite
+*.swp
+*.zip
+.coverage
+pip-log.txt
+^tmp/
+^log/
