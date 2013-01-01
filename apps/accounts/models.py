@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, UserManager
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(User, unique=True, related_name='user_profile_set')
+    user = models.OneToOneField(User)
 
     def __unicode__(self):
         return u'%s:u%s:%s' % (self.id, self.user.id, self.user.email)
