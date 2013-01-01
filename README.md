@@ -1,2 +1,2 @@
-Game Stopper
-=============
+GameStopper.com
+===============

@@ -5,6 +5,10 @@ from django.db.transaction import commit_on_success
 from django.views.decorators.csrf import csrf_exempt
 
 
+def sign_up(request):
+    return HttpResponse('sign up')
+
+
 def sign_in(request):
     return HttpResponse('sign in')
 

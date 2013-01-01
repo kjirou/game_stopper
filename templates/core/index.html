@@ -3,4 +3,10 @@
 {% block body %}
 <h1>GameStopper.com</h1>
 <p>Hello, game junkies!</p>
+<ul>
+  <li><a href="{% url core:index %}">Top</a></li>
+  <li><a href="{% url accounts:sign_up %}">Sign up</a></li>
+  <li><a href="{% url accounts:sign_in %}">Sign in</a></li>
+  <li><a href="{% url accounts:sign_out %}">Sign out</a></li>
+</ul>
 {% endblock %}
