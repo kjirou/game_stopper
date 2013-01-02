@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+<h1>Sign in</h1>
+<form action="{% url accounts:sign_in %}" method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+  <p><input type="submit" value="Submit"></p>
+</form>
+{% endblock %}

@@ -1,6 +1,7 @@
 # coding: utf8
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.contrib.auth import login
 from django.db.transaction import commit_on_success
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -31,7 +32,17 @@ def sign_up(request):
 
 @commit_on_success
 def sign_in(request):
-    return HttpResponse('sign in')
+    if request.method == 'POST':
+        form = SignInForm(request.POST)
+        if form.is_valid():
+            login(request, form.get_user())
+            return HttpResponseRedirect(reverse('core:index'))
+    else:
+        form = SignInForm()
+
+    c = dict(form=form)
+    return render_to_response('accounts/sign_in.html', c,
+        context_instance=RequestContext(request))
 
 
 @commit_on_success
