@@ -1,7 +1,8 @@
 # coding: utf8
 import re
 from django import forms
-from django.contrib.auth import login as auth_login, authenticate
+from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm
 from django.forms import widgets
 from accounts.models import User, UserProfile
 
@@ -44,36 +45,25 @@ class SignUpForm(forms.Form):
         return self.cleaned_data
 
 
-class SignInForm(forms.Form):
-
-    username = UsernameField()
-    password = PasswordField()
-
-    def __init__(self, *args, **kwargs):
-        super(self.__class__, self).__init__(*args, **kwargs)
-        self._user = None
+class ProfiledUserOnlyAuthenticationForm(AuthenticationForm):
 
     def clean(self):
-        if self._errors:
-            return
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
 
-        # FIXME:
-        # - I want to replace error messages to Django's original messages
-        # - If use a one custom message for two places,
-        #     then that message must be managed by using constant etc
-
-        username = self.data['username']
-        password = self.data['password']
-        user = authenticate(username=username, password=password)
-        if user is None:
-            raise forms.ValidationError('The user is not existed')
-        elif user.get_profile() is None:
-            raise forms.ValidationError('The user is not existed')
-        elif user.is_active is False:
-            raise forms.ValidationError('The user is not available')
-        self._user = user
-
+        if username and password:
+            self.user_cache = authenticate(username=username,
+                                           password=password)
+            if self.user_cache is None:
+                raise forms.ValidationError(
+                    self.error_messages['invalid_login'])
+            elif not self.user_cache.is_active:
+                raise forms.ValidationError(self.error_messages['inactive'])
+            # Mod
+            try:
+                self.user_cache.get_profile()
+            except UserProfile.DoesNotExist:
+                raise forms.ValidationError(self.error_messages['inactive'])
+            # /Mod
+        self.check_for_test_cookie()
         return self.cleaned_data
-
-    def get_user(self):
-        return self._user

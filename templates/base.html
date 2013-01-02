@@ -29,9 +29,12 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="{% url core:index %}">Top</a></li>
+            {% if user.is_authenticated %}
+              <li><a href="{% url accounts:logout %}">Sign out</a></li>
+            {% else %}
               <li><a href="{% url accounts:sign_up %}">Sign up</a></li>
-              <li><a href="{% url accounts:sign_in %}">Sign in</a></li>
-              <li><a href="{% url accounts:sign_out %}">Sign out</a></li>
+              <li><a href="{% url accounts:login %}">Sign in</a></li>
+            {% endif %}
             </ul>
           </div><!--/.nav-collapse -->
         </div>

@@ -174,5 +174,10 @@ LOGGING = {
 
 AUTH_PROFILE_MODULE = 'accounts.userprofile'
 
+#LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+#LOGOUT_URL = '/accounts/logout/'
+
+# (Original)
 # 'development' or 'apache' or 'nginx'
 WEB_SERVER = 'development'

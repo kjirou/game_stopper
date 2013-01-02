@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% load url from future %}
 
 {% block container %}
 <h1>Sign in</h1>
-<form action="{% url accounts:sign_in %}" method="post">
+<form action="{% url 'accounts:login' %}" method="post">
   {% csrf_token %}
   {{form.as_p}}
   <p><input type="submit" value="Submit"></p>
+  <input type="hidden" name="next" value="{{next}}" />
 </form>
 {% endblock %}

@@ -1,6 +1,6 @@
 # coding: utf8
 from django.test import TestCase
-from accounts.models import User, UserManager, UserProfile
+from accounts.models import User, UserProfile
 
 
 class UserProfileTest(TestCase):

@@ -1,8 +1,13 @@
 # coding: utf8
 from django.conf.urls import patterns, url, include
+from accounts.forms import ProfiledUserOnlyAuthenticationForm
 
-urlpatterns = patterns('accounts.views',
+urlpatterns = patterns('',
+    url(r'^login/$', 'django.contrib.auth.views.login',
+        { 'authentication_form': ProfiledUserOnlyAuthenticationForm }, name='login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
+)
+
+urlpatterns += patterns('accounts.views',
     url(r'^sign_up/$', 'sign_up', name='sign_up'),
-    url(r'^sign_in/$', 'sign_in', name='sign_in'),
-    url(r'^sign_out/$', 'sign_out', name='sign_out'),
 )

@@ -1,11 +1,11 @@
 # coding: utf8
 from django.test import TestCase, Client
-from accounts.forms import SignInForm
+from accounts.forms import ProfiledUserOnlyAuthenticationForm
 from accounts.models import User, UserProfile
 
 
-class SignInFormTest(TestCase):
-    u'''SignInFormのテスト'''
+class ProfiledUserOnlyAuthenticationFormTest(TestCase):
+    u'''ProfiledUserOnlyAuthenticationFormのテスト'''
 
     def _create_user_profile(self):
         return UserProfile.objects.create_with_user(
@@ -21,26 +21,37 @@ class SignInFormTest(TestCase):
 
     def test_success(self):
         u'''ログイン成功'''
-        user_profile = self._create_user_profile()
-        form = SignInForm({
+        self._create_user_profile()
+        form = ProfiledUserOnlyAuthenticationForm(data={
             'username': self._username,
             'password': self._password,
         })
+        form.is_valid()
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.get_user(), user_profile.user)
 
     def test_failures(self):
-        u'''複数のログイン失敗ケース'''
+        u'''ログイン失敗各種'''
         self._create_user_profile()
 
-        form = SignInForm({
+        form = ProfiledUserOnlyAuthenticationForm(data={
             'username': 'notexisted',
             'password': self._password,
         })
         self.assertFalse(form.is_valid())
 
-        form = SignInForm({
+        form = ProfiledUserOnlyAuthenticationForm(data={
             'username': self._username,
             'password': 'notexisted',
+        })
+        self.assertFalse(form.is_valid())
+
+        # UserProfile無しのユーザはログイン不可
+        profileless_username = 'profileless'
+        profileless_password = 'test'
+        User.objects.create_user(
+            profileless_username, password=profileless_password)
+        form = ProfiledUserOnlyAuthenticationForm(data={
+            'username': profileless_username,
+            'password': profileless_password,
         })
         self.assertFalse(form.is_valid())
