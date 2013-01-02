@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block body %}
+{% block container %}
 <h1>Sign in</h1>
 <form action="{% url accounts:sign_in %}" method="post">
   {% csrf_token %}

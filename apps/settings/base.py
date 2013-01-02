@@ -50,12 +50,12 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = PROJECT_DIR + '/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -114,6 +114,20 @@ TEMPLATE_DIRS = (
     PROJECT_DIR + '/templates',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    # Django 1.4.3 defaults
+    # https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    # Additions
+    'core.context_processors.urls_and_paths',
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -159,3 +173,6 @@ LOGGING = {
 }
 
 AUTH_PROFILE_MODULE = 'accounts.userprofile'
+
+# 'development' or 'apache' or 'nginx'
+WEB_SERVER = 'development'

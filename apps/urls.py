@@ -1,3 +1,5 @@
+from django.conf import settings
+import re
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
@@ -8,3 +10,12 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('core.urls', namespace='core')),
 )
+
+if settings.WEB_SERVER == 'development':
+    urlpatterns += patterns('',
+        (
+            ur'^%s(?P<path>.*)$' % re.sub(ur'^/', u'', settings.MEDIA_URL),
+            'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT}
+        ),
+    )
