@@ -179,6 +179,11 @@ AUTH_PROFILE_MODULE = 'accounts.userprofile'
 LOGIN_REDIRECT_URL = '/locks/'
 #LOGOUT_URL = '/accounts/logout/'
 
-# (Original)
+
+#### Original settings ####
+
 # 'development' or 'apache' or 'nginx'
 WEB_SERVER = 'development'
+
+MAX_LOCKED_FILE_SIZE = 1024 * 1024 * 100
+MAX_LOCKED_FILE_NAME_LENGTH = 64
