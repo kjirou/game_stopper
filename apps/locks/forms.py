@@ -11,22 +11,14 @@ class LockedFileField(forms.FileField):
         super(self.__class__, self).__init__()
         self._max_file_size = settings.MAX_LOCKED_FILE_SIZE
         self._max_file_name_length = settings.MAX_LOCKED_FILE_NAME_LENGTH
-        self._file_data = None
-        self._file_size = None
-        self._file_name = None
 
     def clean(self, value, initial):
         if value is None:
             raise forms.ValidationError('Empty file')
 
-        self._file_data = value.read()
-        value.seek(0)
-        self._file_size = len(self._file_data)
-        self._file_name = value.name
-
-        if self._file_size > self._max_file_size:
+        if value.size > self._max_file_size:
             raise forms.ValidationError('Over file size')
-        if len(self._file_name) > self._max_file_name_length:
+        if len(value.name) > self._max_file_name_length:
             raise forms.ValidationError('Over file name length')
 
         return value

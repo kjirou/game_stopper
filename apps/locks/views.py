@@ -30,6 +30,12 @@ def create(request):
     if request.method == 'POST':
         form = CreateForm(request.POST, request.FILES)
         if form.is_valid():
+            Lock.objects.create_by_user(
+                request.user.get_profile(),
+                form.cleaned_data['locked_file'],
+                form.cleaned_data['period'],
+                form.cleaned_data['saved_hours'],
+            )
             return HttpResponseRedirect(reverse('locks:index'))
     else:
         form = CreateForm()
