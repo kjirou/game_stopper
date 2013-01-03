@@ -1,7 +1,7 @@
 # coding: utf8
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.contrib.auth import login, logout
+from django.contrib.auth import login
 from django.db.transaction import commit_on_success
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -21,7 +21,8 @@ def sign_up(request):
                 form.cleaned_data['username'],
                 form.cleaned_data['password']
             )
-            return HttpResponseRedirect(reverse('core:index'))
+            login(request, user_profile.user)
+            return HttpResponseRedirect(reverse('locks:index'))
     else:
         form = SignUpForm()
 

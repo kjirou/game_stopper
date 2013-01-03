@@ -176,7 +176,7 @@ LOGGING = {
 AUTH_PROFILE_MODULE = 'accounts.userprofile'
 
 #LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/locks/'
 #LOGOUT_URL = '/accounts/logout/'
 
 # (Original)
