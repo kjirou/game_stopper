@@ -1,5 +1,6 @@
 # coding: utf8
 import datetime
+from django.utils.timezone import now as use_tz_now
 from django.contrib.auth.models import User
 from django.db import models
 from accounts.models import UserProfile
@@ -7,8 +8,8 @@ from accounts.models import UserProfile
 
 class LockManager(models.Manager):
 
-    def create_by_user(self, user_profile, uploaded_file, period, saved_hours):
-        locked_at = datetime.datetime.now()
+    def create_by_user(self, user, uploaded_file, period, saved_hours):
+        locked_at = use_tz_now()
         unlockable_at = locked_at + datetime.timedelta(days=period)
 
         max_saved_hours = period * 24
@@ -16,7 +17,7 @@ class LockManager(models.Manager):
             saved_hours = max_saved_hours
 
         return self.create(
-            user_profile=user_profile,
+            user_profile=user.get_profile(),
             file_name=uploaded_file.name,
             file_size=uploaded_file.size,
             password=User.objects.make_random_password(8),
