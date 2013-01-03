@@ -7,6 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^accounts/', include('accounts.urls', namespace='accounts')),
+    url(r'^locks/', include('locks.urls', namespace='locks')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('core.urls', namespace='core')),
 )
