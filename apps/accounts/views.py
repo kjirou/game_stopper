@@ -17,7 +17,7 @@ def sign_up(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user_profile = UserProfile.objects.create_with_user(
+            user_profile = UserProfile.objects.sign_up(
                 form.cleaned_data['username'],
                 form.cleaned_data['password']
             )

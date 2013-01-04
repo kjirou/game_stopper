@@ -1,13 +1,14 @@
 from django.db import models
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
 
 class UserProfileManager(models.Manager):
 
-    def create_with_user(self, username, password):
-        user = User.objects.create_user(username, password=password)
-        obj = self.create(user=user)
-        return obj
+    def sign_up(self, username, password):
+        User.objects.create_user(username, password=password)
+        user = authenticate(username=username, password=password)
+        return self.create(user=user)
 
 
 class UserProfile(models.Model):

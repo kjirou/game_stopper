@@ -7,8 +7,8 @@ from accounts.models import User, UserProfile
 class SignUpViewTest(TestCase):
     u'''sign_upビューのテスト'''
 
-    def _create_user_profile(self):
-        return UserProfile.objects.create_with_user(
+    def _sign_up(self):
+        return UserProfile.objects.sign_up(
             self._username, self._password)
 
     def setUp(self):
@@ -34,7 +34,7 @@ class SignUpViewTest(TestCase):
     # - client.loginを使ってもいいらしい
     #def test_success_signed_in(self):
     #    u'''ログイン成功'''
-    #    user_profile = self._create_user_profile()
+    #    user_profile = self._sign_up()
     #
     #    response = self.client.post(reverse('accounts:sign_in'), {
     #        'username': self._username,

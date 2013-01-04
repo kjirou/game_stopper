@@ -15,3 +15,11 @@ class UserProfileTest(TestCase):
         user = User.objects.create_user('test_user')
         user_profile = UserProfile.objects.create(user=user)
         self.assertEqual(user_profile, user.get_profile())
+
+    def test_sign_up(self):
+        u'''sign_upメソッドの確認'''
+        username = 'testuser'
+        password = 'testpw'
+        user_profile = UserProfile.objects.sign_up(username, password)
+        # DBに存在するか
+        UserProfile.objects.get(user__username=username)

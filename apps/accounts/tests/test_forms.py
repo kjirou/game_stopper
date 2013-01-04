@@ -7,8 +7,8 @@ from accounts.models import User, UserProfile
 class ProfiledUserOnlyAuthenticationFormTest(TestCase):
     u'''ProfiledUserOnlyAuthenticationFormのテスト'''
 
-    def _create_user_profile(self):
-        return UserProfile.objects.create_with_user(
+    def _sign_up(self):
+        return UserProfile.objects.sign_up(
             self._username, self._password)
 
     def setUp(self):
@@ -21,7 +21,7 @@ class ProfiledUserOnlyAuthenticationFormTest(TestCase):
 
     def test_success(self):
         u'''ログイン成功'''
-        self._create_user_profile()
+        self._sign_up()
         form = ProfiledUserOnlyAuthenticationForm(data={
             'username': self._username,
             'password': self._password,
@@ -31,7 +31,7 @@ class ProfiledUserOnlyAuthenticationFormTest(TestCase):
 
     def test_failures(self):
         u'''ログイン失敗各種'''
-        self._create_user_profile()
+        self._sign_up()
 
         form = ProfiledUserOnlyAuthenticationForm(data={
             'username': 'notexisted',

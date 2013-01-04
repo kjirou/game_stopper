@@ -1,4 +1,5 @@
 # coding: utf8
+from django.conf import settings
 import datetime
 from django.utils.timezone import now as use_tz_now
 from django.contrib.auth.models import User
@@ -18,6 +19,7 @@ class LockManager(models.Manager):
 
         return self.create(
             user_profile=user.get_profile(),
+            locked_file=uploaded_file,
             file_name=uploaded_file.name,
             file_size=uploaded_file.size,
             password=User.objects.make_random_password(8),
@@ -27,9 +29,19 @@ class LockManager(models.Manager):
         )
 
 
+def _locked_file_upload_to(instance, filename):
+    return '%s%s/%s' % (
+        settings.MEDIA_ROOT,
+        settings.LOCKED_FILES_DIR_NAME,
+        User.objects.make_random_password(32),
+    )
+
+
 class Lock(models.Model):
     objects = LockManager()
     user_profile = models.ForeignKey(UserProfile, related_name='lock_set')
+    locked_file = models.FileField(
+        upload_to=_locked_file_upload_to, blank=True, null=True)
     file_name = models.CharField(max_length=255)
     file_size = models.PositiveIntegerField()
     password = models.CharField(max_length=16)

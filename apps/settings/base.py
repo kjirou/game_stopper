@@ -185,5 +185,6 @@ LOGIN_REDIRECT_URL = '/locks/'
 # 'development' or 'apache' or 'nginx'
 WEB_SERVER = 'development'
 
+LOCKED_FILES_DIR_NAME = 'locked_files'
 MAX_LOCKED_FILE_SIZE = 1024 * 1024 * 100
 MAX_LOCKED_FILE_NAME_LENGTH = 64
