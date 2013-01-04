@@ -11,7 +11,7 @@ class LockTest(TestCase):
     u'''Lockモデルのテスト'''
 
     def _create_user_profile(self):
-        return UserProfile.objects.create_with_user(
+        return UserProfile.objects.sign_up(
             self._username, self._password)
 
     def setUp(self):

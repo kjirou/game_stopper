@@ -30,11 +30,15 @@ class LockManager(models.Manager):
 
 
 def _locked_file_upload_to(instance, filename):
-    return '%s%s/%s' % (
-        settings.MEDIA_ROOT,
+    return '%s/%s/dummy' % (
         settings.LOCKED_FILES_DIR_NAME,
         User.objects.make_random_password(32),
     )
+    #return '%s%s/%s/dummy' % (
+    #    settings.MEDIA_ROOT,
+    #    settings.LOCKED_FILES_DIR_NAME,
+    #    User.objects.make_random_password(32),
+    #)
 
 
 class Lock(models.Model):
