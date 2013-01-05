@@ -1,5 +1,6 @@
 # coding: utf8
 from django.conf import settings
+import os
 import datetime
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -32,6 +33,8 @@ class LockTest(TestCase):
         u'''正常な登録処理を確認、以下のケースも含める
         - 救済時間の 期間 * 24時間 を上限とした切り捨て処理
         - awareなUTC時間で保存されているか
+        - FieldFileの操作、使ったことないから
+          https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.fields.files.FieldFile
         '''
         user_profile = self._create_user_profile()
         file_name = 'dummy.txt'
@@ -47,8 +50,17 @@ class LockTest(TestCase):
             saved_hours
         )
 
-        lock = Lock.objects.get(file_name=file_name)
+        lock_obj = Lock.objects.get(file_name=file_name)
         # 救済時間が正しく切り捨てられているか
-        self.assertEqual(lock.saved_hours, period * 24)
+        self.assertEqual(lock_obj.saved_hours, period * 24)
         # UTC時間か
-        self.assertTrue(is_aware(lock.locked_at))
+        self.assertTrue(is_aware(lock_obj.locked_at))
+        # ファイルが正しく保存されているか
+        self.assertTrue(bool(lock_obj.locked_file))  # ファイル存否チェックはboolへキャスト
+        self.assertEqual(len(lock_obj.locked_file.read()), size)
+        # ファイル削除
+        locked_file_path = lock_obj.locked_file.path  # ファイルまでの絶対パス
+        self.assertTrue(os.path.isfile(locked_file_path))
+        lock_obj.locked_file.delete()
+        self.assertFalse(os.path.isfile(locked_file_path))
+        self.assertFalse(bool(lock_obj.locked_file))

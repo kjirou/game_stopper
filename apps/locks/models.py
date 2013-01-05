@@ -1,7 +1,7 @@
 # coding: utf8
 from django.conf import settings
 import datetime
-from django.utils.timezone import now as use_tz_now
+from django.utils.timezone import now as django_now
 from django.contrib.auth.models import User
 from django.db import models
 from accounts.models import UserProfile
@@ -10,7 +10,7 @@ from accounts.models import UserProfile
 class LockManager(models.Manager):
 
     def create_by_user(self, user, uploaded_file, period, saved_hours):
-        locked_at = use_tz_now()
+        locked_at = django_now()
         unlockable_at = locked_at + datetime.timedelta(days=period)
 
         max_saved_hours = period * 24
@@ -30,22 +30,19 @@ class LockManager(models.Manager):
 
 
 def _locked_file_upload_to(instance, filename):
-    return '%s/%s/dummy' % (
+    now = django_now()
+    return '%s/%04d/%02d/%s/dummy' % (
         settings.LOCKED_FILES_DIR_NAME,
+        now.year,
+        now.month,
         User.objects.make_random_password(32),
     )
-    #return '%s%s/%s/dummy' % (
-    #    settings.MEDIA_ROOT,
-    #    settings.LOCKED_FILES_DIR_NAME,
-    #    User.objects.make_random_password(32),
-    #)
 
 
 class Lock(models.Model):
     objects = LockManager()
     user_profile = models.ForeignKey(UserProfile, related_name='lock_set')
-    locked_file = models.FileField(
-        upload_to=_locked_file_upload_to, blank=True, null=True)
+    locked_file = models.FileField(upload_to=_locked_file_upload_to)
     file_name = models.CharField(max_length=255)
     file_size = models.PositiveIntegerField()
     password = models.CharField(max_length=16)
