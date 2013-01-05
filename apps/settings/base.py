@@ -186,6 +186,7 @@ LOGIN_REDIRECT_URL = '/locks/'
 WEB_SERVER = 'development'
 
 TMP_ROOT = PROJECT_DIR + '/tmp'
+FILELOCKER_WORKING_ROOT = TMP_ROOT + '/filelocker'
 
 LOCKED_FILES_DIR_NAME = 'locked_files'
 MAX_LOCKED_FILE_SIZE = 1024 * 1024 * 100
