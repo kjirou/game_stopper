@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from core.utils import get_test_tmp_dir, create_test_tmp_dir, \
     delete_test_tmp_dir
-from locks import filelocker
+from locks.filelocker import FileLocker
 
 
 class FileLockerTest(TestCase):
@@ -19,10 +19,11 @@ class FileLockerTest(TestCase):
     def tearDown(self):
         delete_test_tmp_dir()
 
-    def test_create_zipped_dir_name(self):
-        u'''_create_zipped_dir_nameのテスト'''
+    def test_create_container_name(self):
+        u'''_create_container_nameのテスト'''
+        fl = FileLocker()
         self.assertRegexpMatches(
-            filelocker._create_zipped_dir_name(), r'gs-locked-\d+')
+            fl._create_container_name(), r'gs-locked-\d+')
 
     def test_copy(self):
         u'''_copyのテスト'''
@@ -31,7 +32,8 @@ class FileLockerTest(TestCase):
         content = 'a' * size
         uploaded_file = SimpleUploadedFile(file_name, content)
         path = get_test_tmp_dir() + '/' + file_name
-        filelocker._copy(uploaded_file, path)
+
+        FileLocker()._copy(uploaded_file, path)
         # 保存したファイルを開けて内容が一致するかを確認
         fh = open(path, 'r')
         self.assertEqual(content, fh.read())
@@ -44,7 +46,11 @@ class FileLockerTest(TestCase):
         content = 'a' * size
         uploaded_file = SimpleUploadedFile(file_name, content)
         password = 'abcd1234'
-        locked_file_path = filelocker.lock(uploaded_file, password)
+
+        fl = FileLocker()
+        fl.lock(uploaded_file, password)
+        locked_file_path = fl.get_locked_file_path()
+
         # ファイルが存在し、zip形式か
         self.assertTrue(zipfile.is_zipfile(locked_file_path))
         # パスワード無しで解凍できないか
@@ -60,5 +66,11 @@ class FileLockerTest(TestCase):
         # 正しいファイル名で格納されているか
         self.assertEqual(zip.namelist()[0], file_name)
         # ファイルの内容は正しいか
-        self.assertEqual(zip.open(file_name, 'r').read(), content)
+        fh = zip.open(file_name, 'r')
+        self.assertEqual(fh.read(), content)
+        fh.close()
         zip.close()
+        # 一時ファイル群の削除と確認
+        self.assertTrue(os.path.isdir(fl._working_dir_path))
+        fl.delete()
+        self.assertFalse(os.path.isdir(fl._working_dir_path))
