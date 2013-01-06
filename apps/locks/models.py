@@ -3,8 +3,8 @@ from django.conf import settings
 import re
 import datetime
 from django.core.files import File
+from django.utils.crypto import get_random_string
 from django.utils.timezone import now as django_now
-from django.contrib.auth.models import User
 from django.db import models
 from accounts.models import UserProfile
 from locks.filelocker import FileLocker
@@ -20,7 +20,7 @@ class LockManager(models.Manager):
         if saved_hours > max_saved_hours:
             saved_hours = max_saved_hours
 
-        password = User.objects.make_random_password(8)
+        password = get_random_string(8, allowed_chars='0123456789')
         fl = FileLocker()
         fl.lock(uploaded_file, password)
         locked_file = File(
@@ -50,7 +50,7 @@ def _locked_file_upload_to(instance, filename):
         settings.LOCKED_FILES_DIR_NAME,
         now.year,
         now.month,
-        User.objects.make_random_password(32),
+        get_random_string(32),
         filename,
     )
 
