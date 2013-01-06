@@ -24,7 +24,6 @@ def create(request):
 
     # TODO:
     # - 二重投稿対策
-    # - 念のためファイルを保存
     # - レスポンスでファイルzip化して返す
 
     if request.method == 'POST':

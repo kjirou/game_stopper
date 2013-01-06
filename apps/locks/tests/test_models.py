@@ -56,8 +56,9 @@ class LockTest(TestCase):
         # UTC時間か
         self.assertTrue(is_aware(lock_obj.locked_at))
         # ファイルが正しく保存されているか
-        self.assertTrue(bool(lock_obj.locked_file))  # ファイル存否チェックはboolへキャスト
-        self.assertEqual(len(lock_obj.locked_file.read()), size)
+        self.assertTrue(bool(lock_obj.locked_file))
+        # サイズが正しいか、圧縮後のサイズは不明なので0超で確認
+        self.assertNotEqual(len(lock_obj.locked_file.read()), 0)
         # ファイル削除
         locked_file_path = lock_obj.locked_file.path  # ファイルまでの絶対パス
         self.assertTrue(os.path.isfile(locked_file_path))

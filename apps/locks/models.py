@@ -1,10 +1,12 @@
 # coding: utf8
 from django.conf import settings
 import datetime
+from django.core.files import File
 from django.utils.timezone import now as django_now
 from django.contrib.auth.models import User
 from django.db import models
 from accounts.models import UserProfile
+from locks.filelocker import FileLocker
 
 
 class LockManager(models.Manager):
@@ -17,25 +19,38 @@ class LockManager(models.Manager):
         if saved_hours > max_saved_hours:
             saved_hours = max_saved_hours
 
-        return self.create(
+        password = User.objects.make_random_password(8)
+        fl = FileLocker()
+        fl.lock(uploaded_file, password)
+        locked_file = File(
+            open(fl.get_locked_file_path(), 'r'),
+            name=fl.get_locked_file_name()
+        )
+
+        obj = self.create(
             user_profile=user.get_profile(),
-            locked_file=uploaded_file,
+            locked_file=locked_file,
             file_name=uploaded_file.name,
             file_size=uploaded_file.size,
-            password=User.objects.make_random_password(8),
+            password=password,
             locked_at=locked_at,
             unlockable_at=unlockable_at,
             saved_hours=saved_hours
         )
 
+        locked_file.close()
+        fl.clean()
+        return obj
+
 
 def _locked_file_upload_to(instance, filename):
     now = django_now()
-    return '%s/%04d/%02d/%s/dummy' % (
+    return '%s/%04d/%02d/%s/%s' % (
         settings.LOCKED_FILES_DIR_NAME,
         now.year,
         now.month,
         User.objects.make_random_password(32),
+        filename,
     )
 
 

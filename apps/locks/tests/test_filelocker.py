@@ -39,8 +39,8 @@ class FileLockerTest(TestCase):
         self.assertEqual(content, fh.read())
 
     @override_settings(FILELOCKER_WORKING_ROOT=get_test_tmp_dir())
-    def test_lock_and_delete(self):
-        u'''lockとdeleteのテスト'''
+    def test_lock_and_clean(self):
+        u'''lockとcleanのテスト'''
         file_name = 'dummy.txt'
         size = 1024 * 1024
         content = 'a' * size
@@ -72,5 +72,5 @@ class FileLockerTest(TestCase):
         zip.close()
         # 一時ファイル群の削除と確認
         self.assertTrue(os.path.isdir(fl._working_dir_path))
-        fl.delete()
+        fl.clean()
         self.assertFalse(os.path.isdir(fl._working_dir_path))

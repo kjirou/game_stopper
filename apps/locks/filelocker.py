@@ -12,8 +12,6 @@ class FileLocker(object):
     def __init__(self):
         self._working_dir_path = self._create_working_dir_path()
         self._container_name = self._create_container_name()
-        self._container_dir_path = self._working_dir_path + '/' + self._container_name
-        self._locked_file_path = self._container_dir_path + '.zip'
 
     def _create_working_dir_path(self):
         return '%s/%s' % (
@@ -41,13 +39,25 @@ class FileLocker(object):
         ])
 
     def lock(self, uploaded_file, password):
-        os.makedirs(self._container_dir_path)
+        os.makedirs(self._get_container_dir_path())
         self._copy(
-            uploaded_file, self._container_dir_path + '/' + uploaded_file.name)
-        self._to_zip(self._locked_file_path, self._container_dir_path, password)
+            uploaded_file,
+            self._get_container_dir_path() + '/' + uploaded_file.name
+        )
+        self._to_zip(
+            self.get_locked_file_path(),
+            self._get_container_dir_path(),
+            password
+        )
+
+    def _get_container_dir_path(self):
+        return self._working_dir_path + '/' + self._container_name
+
+    def get_locked_file_name(self):
+        return self._container_name + '.zip'
 
     def get_locked_file_path(self):
-        return self._locked_file_path
+        return self._working_dir_path + '/' + self.get_locked_file_name()
 
-    def delete(self):
+    def clean(self):
         shutil.rmtree(self._working_dir_path)
