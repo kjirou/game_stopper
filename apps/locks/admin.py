@@ -5,7 +5,7 @@ from locks.models import Lock
 
 class LockAdmin(admin.ModelAdmin):
     list_display = [
-        'id', '__unicode__', 'user_profile', 'file_size',
+        'id', '__unicode__', 'user_profile', 'original_file_size',
         'locked_at', 'unlockable_at', 'unlocked_at'
     ]
     list_display_links = ['id', '__unicode__']

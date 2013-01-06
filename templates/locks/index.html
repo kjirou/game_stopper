@@ -10,4 +10,31 @@
 <div class="row">
   <a href="{% url 'locks:create' %}" class="btn btn-large btn-primary">Lock your file</a>
 </div>
+{% if locks %}
+<div class="row" style="margin-top:20px;">
+  <table class="table">
+    <tr>
+      <th>Id</th>
+      <th>Original file name</th>
+      {#<th>Original file size</th>#}
+      <th>Locked file</th>
+      <th>Locked at</th>
+      <th>Until unlockable</th>
+      <th>Saved hours</th>
+    </tr>
+  {% for lock in locks %}
+    <tr>
+      <td>{{lock.id}}</td>
+      <td>{{lock.original_file_name}}</td>
+      {#<td>{{lock.original_file_size|filesizeformat}}</td>#}
+      <td><a href="{{lock.locked_file.url}}">{{lock.get_locked_file_name}}</a><br />
+        [<a href="#">Delete file, now</a>]</td>
+      <td>{{lock.locked_at|date:"Y/m/d"}}<br />{{lock.locked_at|time:"H:i:s"}}</td>
+      <td>{{lock.unlockable_at|timeuntil}}</td>
+      <td>{{lock.saved_hours}}</td>
+    </tr>
+  {% endfor %}
+  </table>
+</div>
+{% endif %}
 {% endblock %}

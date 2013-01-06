@@ -13,7 +13,10 @@ from locks.models import Lock
 
 @login_required
 def index(request):
-    c = {}
+    c = {
+        'locks': Lock.objects.filter(
+            user_profile=request.user.get_profile()).order_by('-locked_at'),
+    }
     return render_to_response('locks/index.html', c,
         context_instance=RequestContext(request))
 
@@ -23,8 +26,7 @@ def index(request):
 def create(request):
 
     # TODO:
-    # - 二重投稿対策
-    # - レスポンスでファイルzip化して返す
+    # - 二重投稿対策と重いファイルの際のNow loading表示
 
     if request.method == 'POST':
         form = CreateForm(request.POST, request.FILES)

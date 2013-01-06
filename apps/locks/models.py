@@ -1,5 +1,6 @@
 # coding: utf8
 from django.conf import settings
+import re
 import datetime
 from django.core.files import File
 from django.utils.timezone import now as django_now
@@ -30,8 +31,8 @@ class LockManager(models.Manager):
         obj = self.create(
             user_profile=user.get_profile(),
             locked_file=locked_file,
-            file_name=uploaded_file.name,
-            file_size=uploaded_file.size,
+            original_file_name=uploaded_file.name,
+            original_file_size=uploaded_file.size,
             password=password,
             locked_at=locked_at,
             unlockable_at=unlockable_at,
@@ -58,8 +59,8 @@ class Lock(models.Model):
     objects = LockManager()
     user_profile = models.ForeignKey(UserProfile, related_name='lock_set')
     locked_file = models.FileField(upload_to=_locked_file_upload_to)
-    file_name = models.CharField(max_length=255)
-    file_size = models.PositiveIntegerField()
+    original_file_name = models.CharField(max_length=255)
+    original_file_size = models.PositiveIntegerField()
     password = models.CharField(max_length=16)
     locked_at = models.DateTimeField(help_text=u'施錠日時')
     unlockable_at = models.DateTimeField(help_text=u'解錠可能日時')
@@ -68,9 +69,12 @@ class Lock(models.Model):
     saved_hours = models.PositiveIntegerField()
 
     def __unicode__(self):
-        return u'%s' % (self.file_name,)
+        return u'%s' % (self.original_file_name,)
 
     class Meta:
         db_table = 'locks_lock'
         verbose_name = 'Lock'
         verbose_name_plural = 'Locks'
+
+    def get_locked_file_name(self):
+        return re.findall(r'[^/]+$', self.locked_file.url)[0]

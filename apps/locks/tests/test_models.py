@@ -50,7 +50,7 @@ class LockTest(TestCase):
             saved_hours
         )
 
-        lock_obj = Lock.objects.get(file_name=file_name)
+        lock_obj = Lock.objects.get(original_file_name=file_name)
         # 救済時間が正しく切り捨てられているか
         self.assertEqual(lock_obj.saved_hours, period * 24)
         # UTC時間か
