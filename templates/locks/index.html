@@ -27,8 +27,14 @@
       <td>{{lock.id}}</td>
       <td>{{lock.original_file_name}}</td>
       {#<td>{{lock.original_file_size|filesizeformat}}</td>#}
-      <td><a href="{{lock.locked_file.url}}">{{lock.get_locked_file_name}}</a><br />
-        [<a href="#">Delete file, now</a>]</td>
+      <td>
+      {% if lock.locked_file %}
+        <a href="{{lock.locked_file.url}}">{{lock.get_locked_file_name}}</a><br />
+        [<a href="{% url 'locks:delete_file' lock.id %}">Delete file, now</a>]
+      {% else %}
+        Deleted
+      {% endif %}
+      </td>
       <td>{{lock.locked_at|date:"Y/m/d"}}<br />{{lock.locked_at|time:"H:i:s"}}</td>
       <td>{{lock.unlockable_at|timeuntil}}</td>
       <td>{{lock.saved_hours}}</td>

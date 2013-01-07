@@ -44,3 +44,9 @@ def create(request):
     c = dict(form=form)
     return render_to_response('locks/create.html', c,
         context_instance=RequestContext(request))
+
+
+@login_required
+@commit_on_success
+def delete_file(request, id):
+    return HttpResponse('delete' + str(id))
