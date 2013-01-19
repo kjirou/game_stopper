@@ -16,7 +16,6 @@
     <tr>
       <th>Id</th>
       <th>Original file name</th>
-      {#<th>Original file size</th>#}
       <th>Locked file</th>
       <th>Locked at</th>
       <th>Until unlockable</th>
@@ -26,21 +25,34 @@
     <tr>
       <td>{{lock.id}}</td>
       <td>{{lock.original_file_name}}</td>
-      {#<td>{{lock.original_file_size|filesizeformat}}</td>#}
       <td>
       {% if lock.locked_file %}
         <a href="{{lock.locked_file.url}}">{{lock.locked_file_name}}</a><br />
-        [<a id="delete_file_now" href="{% url 'locks:delete_file' lock.id %}">Delete file, now</a>]
+        [<a id="delete_file" href="{% url 'locks:delete_file' lock.id %}">Delete file</a>]
         <script>
-          $a.attachConfirmation('delete_file_now', 'Are you sure you want it?');
+          $a.attachConfirmation('delete_file', 'Are you sure you want it?');
         </script>
       {% else %}
         <span class="inactive">{{lock.locked_file_name}}</span>
       {% endif %}
       </td>
       <td>{{lock.locked_at|date:"Y/m/d"}}<br />{{lock.locked_at|time:"H:i:s"}}</td>
-      <td>{{lock.unlockable_at|timeuntil}}</td>
-      <td>{{lock.saved_hours}}</td>
+      <td>
+      {% if lock.is_unlockable %}
+        {% if lock.unlocked_at %}
+          Password:<br />
+          [{{lock.password}}]
+        {% else %}
+          [<a id="unlock_file" href="{% url 'locks:unlock_file' lock.id %}">Unlock</a>]
+          <script>
+            $a.attachConfirmation('unlock_file', 'Are you sure you want it?\nRecollect a reason that you used this site!');
+          </script>
+        {% endif %}
+      {% else %}
+        {{lock.unlockable_at|timeuntil}}
+      {% endif %}
+      </td>
+      <td>+{{lock.saved_hours}}</td>
     </tr>
   {% endfor %}
   </table>

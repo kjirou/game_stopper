@@ -44,10 +44,6 @@ class LockManager(models.Manager):
         fl.clean()
         return obj
 
-    def delete_locked_file(self, id):
-        obj = self.get(id=id)
-        obj.locked_file.delete()
-
 
 def _locked_file_upload_to(instance, filename):
     now = django_now()
@@ -81,3 +77,13 @@ class Lock(models.Model):
         db_table = 'locks_lock'
         verbose_name = 'Lock'
         verbose_name_plural = 'Locks'
+
+    def is_unlockable(self):
+        return django_now() > self.unlockable_at
+
+    def delete_locked_file(self):
+        self.locked_file.delete()
+
+    def unlock_locked_file(self):
+        self.unlocked_at = django_now()
+        self.save()

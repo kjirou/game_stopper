@@ -5,7 +5,7 @@ import datetime
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.test.utils import override_settings
-from django.utils.timezone import is_aware
+from django.utils.timezone import is_aware, now as django_now
 from core.utils import get_test_tmp_dir, create_test_tmp_dir, \
     delete_test_tmp_dir
 from accounts.models import UserProfile
@@ -65,3 +65,29 @@ class LockTest(TestCase):
         lock_obj.locked_file.delete()
         self.assertFalse(os.path.isfile(locked_file_path))
         self.assertFalse(bool(lock_obj.locked_file))
+
+    def test_is_unlockable(self):
+        u'''Lock.is_unlocableが正しいか
+        タイムゾーン処理が慣れていないので特にテスト
+        '''
+        user_profile = self._create_user_profile()
+        now = django_now()
+        after = now + datetime.timedelta(seconds=1)
+
+        lock_obj = Lock.objects.create(
+            user_profile=user_profile,
+            locked_file_name='dummy',
+            original_file_name='dummy',
+            original_file_size=1,
+            password='dummy',
+            locked_at=now,
+            unlockable_at=after,
+            saved_hours=1
+        )
+        # 解除可能日時が現在時刻以上
+        self.assertFalse(lock_obj.is_unlockable())
+        # 解除可能日時が現在時刻未満
+        pre = now - datetime.timedelta(seconds=1)
+        lock_obj.unlockable_at = pre
+        lock_obj.save()
+        self.assertTrue(lock_obj.is_unlockable())
