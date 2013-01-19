@@ -35,7 +35,7 @@
           $a.attachConfirmation('delete_file_now', 'Are you sure you want it?');
         </script>
       {% else %}
-        Deleted
+        <span class="inactive">{{lock.locked_file_name}}</span>
       {% endif %}
       </td>
       <td>{{lock.locked_at|date:"Y/m/d"}}<br />{{lock.locked_at|time:"H:i:s"}}</td>

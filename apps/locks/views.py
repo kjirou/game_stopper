@@ -49,4 +49,5 @@ def create(request):
 @login_required
 @commit_on_success
 def delete_file(request, id):
-    return HttpResponse('delete' + str(id))
+    Lock.objects.delete_locked_file(id)
+    return HttpResponseRedirect(reverse('locks:index'))

@@ -44,6 +44,10 @@ class LockManager(models.Manager):
         fl.clean()
         return obj
 
+    def delete_locked_file(self, id):
+        obj = self.get(id=id)
+        obj.locked_file.delete()
+
 
 def _locked_file_upload_to(instance, filename):
     now = django_now()
