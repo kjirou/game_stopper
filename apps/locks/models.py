@@ -31,6 +31,7 @@ class LockManager(models.Manager):
         obj = self.create(
             user_profile=user.get_profile(),
             locked_file=locked_file,
+            locked_file_name=fl.get_locked_file_name(),
             original_file_name=uploaded_file.name,
             original_file_size=uploaded_file.size,
             password=password,
@@ -59,6 +60,7 @@ class Lock(models.Model):
     objects = LockManager()
     user_profile = models.ForeignKey(UserProfile, related_name='lock_set')
     locked_file = models.FileField(upload_to=_locked_file_upload_to)
+    locked_file_name = models.CharField(max_length=255)
     original_file_name = models.CharField(max_length=255)
     original_file_size = models.PositiveIntegerField()
     password = models.CharField(max_length=16)
@@ -75,6 +77,3 @@ class Lock(models.Model):
         db_table = 'locks_lock'
         verbose_name = 'Lock'
         verbose_name_plural = 'Locks'
-
-    def get_locked_file_name(self):
-        return re.findall(r'[^/]+$', self.locked_file.url)[0]
