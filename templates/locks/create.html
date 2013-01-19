@@ -9,6 +9,9 @@
   enctype="multipart/form-data">
   {% csrf_token %}
   {{form.as_p}}
-  <p><input type="submit" value="Submit"></p>
+  <p><input id="_submit" type="submit" value="Submit"></p>
+  <script>
+    $a.attachConfirmation('_submit', 'OK?', 'Please wait for upload finish');
+  </script>
 </form>
 {% endblock %}

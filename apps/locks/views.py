@@ -24,10 +24,6 @@ def index(request):
 @login_required
 @commit_on_success
 def create(request):
-
-    # TODO:
-    # - 二重投稿対策と重いファイルの際のNow loading表示
-
     if request.method == 'POST':
         form = CreateForm(request.POST, request.FILES)
         if form.is_valid():
