@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'twauthorizer',
     'core',
     'accounts',
     'locks',
@@ -184,6 +185,10 @@ LOGIN_REDIRECT_URL = '/locks/'
 
 # 'development' or 'apache' or 'nginx'
 WEB_SERVER = 'development'
+
+# twauthorizer
+TWAUTHORIZER_CONSUMER_KEY = ''
+TWAUTHORIZER_CONSUMER_SECRET = ''
 
 TMP_ROOT = PROJECT_DIR + '/tmp'
 FILELOCKER_WORKING_ROOT = TMP_ROOT + '/filelocker'
