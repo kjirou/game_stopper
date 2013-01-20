@@ -20,3 +20,6 @@ DATABASES = {
     #    'PORT': '3306',
     #},
 }
+
+TWAUTHORIZER_CONSUMER_KEY = 'Your key'
+TWAUTHORIZER_CONSUMER_SECRET = 'Your secret key'
