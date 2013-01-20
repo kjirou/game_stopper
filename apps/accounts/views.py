@@ -22,7 +22,7 @@ def sign_up(request):
                 form.cleaned_data['password']
             )
             login(request, user_profile.user)
-            return HttpResponseRedirect(reverse('locks:index'))
+            return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
     else:
         form = SignUpForm()
 
