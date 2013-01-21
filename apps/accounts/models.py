@@ -6,8 +6,7 @@ from django.contrib.auth.models import User
 class UserProfileManager(models.Manager):
 
     def sign_up(self, username, password):
-        User.objects.create_user(username, password=password)
-        user = authenticate(username=username, password=password)
+        user = User.objects.create_user(username, password=password)
         return self.create(user=user)
 
 

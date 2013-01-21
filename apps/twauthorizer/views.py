@@ -1,11 +1,12 @@
 # coding: utf8
 import tweepy
 from django.conf import settings
+from django.contrib.auth import authenticate, login
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from twauthorizer.models import Twitterer
 
 
-VERIFIED_TWITTER_ID_SESSION_KEY = 'twauthorizer_verified_twitter_id'
 REQUEST_TOKEN_SESSION_KEY = 'twauthorizer_request_token'
 
 
@@ -47,6 +48,15 @@ def auth_callback(request):
         return HttpResponseRedirect(settings.LOGIN_URL)
 
     api = tweepy.API(auth)
-    request.session[VERIFIED_TWITTER_ID_SESSION_KEY] = api.me().id_str
+    twitter_id = api.me().id_str
+    screen_name = api.me().screen_name
 
-    return HttpResponse('auth_callback')
+    try:
+        twitterer = Twitterer.objects.get(twitter_id=twitter_id)
+    except Twitterer.DoesNotExist:
+        twitterer = Twitterer.objects.sign_up(twitter_id, screen_name)
+
+    user = authenticate(username=twitterer.twitter_id)
+    login(request, user)
+
+    return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)

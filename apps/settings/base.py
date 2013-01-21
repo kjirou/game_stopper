@@ -174,6 +174,11 @@ LOGGING = {
     }
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'twauthorizer.backends.TwitterIdBackend',
+)
+
 AUTH_PROFILE_MODULE = 'accounts.userprofile'
 
 #LOGIN_URL = '/accounts/login/'
