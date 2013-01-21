@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 {% load url from future %}
 
-{% block nav_login_class %}active{% endblock %}
+{#{% block nav_login_class %}active{% endblock %}#}
 
 {% block container %}
+<div class="row">
+  <h1>Sign in with Twitter</h1>
+</div>
+<div class="row">
+  <a href="{% url 'twauthorizer:auth' %}"><img src="{{MEDIA_URL}}/img/sign-in-with-twitter-gray.png" width="158" height="28" /></a>
+</div>
+
+
+{% if 0  %}
 <h1>Sign in</h1>
 <form action="{% url 'accounts:login' %}" method="post">
   {% csrf_token %}
@@ -11,4 +20,5 @@
   <p><input type="submit" value="Submit"></p>
   <input type="hidden" name="next" value="{{next}}" />
 </form>
+{% endif %}
 {% endblock %}

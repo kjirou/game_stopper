@@ -39,7 +39,7 @@
               <li class="{% block nav_locks_class %}{% endblock %}"><a href="{% url locks:index %}">Locks</a></li>
               <li><a href="{% url accounts:logout %}">Sign out</a></li>
             {% else %}
-              <li class="{% block nav_sign_up_class %}{% endblock %}"><a href="{% url accounts:sign_up %}">Sign up</a></li>
+              {#<li class="{% block nav_sign_up_class %}{% endblock %}"><a href="{% url accounts:sign_up %}">Sign up</a></li>#}
               <li class="{% block nav_login_class %}{% endblock %}"><a href="{% url accounts:login %}">Sign in</a></li>
             {% endif %}
             </ul>

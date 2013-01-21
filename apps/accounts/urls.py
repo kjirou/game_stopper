@@ -8,6 +8,6 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
 )
 
-urlpatterns += patterns('accounts.views',
-    url(r'^sign_up/$', 'sign_up', name='sign_up'),
-)
+#urlpatterns += patterns('accounts.views',
+#    url(r'^sign_up/$', 'sign_up', name='sign_up'),
+#)
