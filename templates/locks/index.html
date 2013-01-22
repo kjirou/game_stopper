@@ -3,59 +3,59 @@
 
 {% block nav_locks_class %}active{% endblock %}
 
-{% block container %}
-<div class="row">
-  <h1>Your locks</h1>
-</div>
-<div class="row">
+{% block page_body %}
+<h1>Your locks</h1>
+
+<div style="margin-top:20px;">
   <a href="{% url 'locks:create' %}" class="btn btn-large btn-primary">Lock your file</a>
 </div>
+
 {% if locks %}
-<div class="row" style="margin-top:20px;">
-  <table class="table">
-    <tr>
-      <th>Id</th>
-      <th>Original file name</th>
-      <th>Locked file</th>
-      <th>Locked at</th>
-      <th>Until unlockable</th>
-      <th>Saved hours</th>
-    </tr>
-  {% for lock in locks %}
-    <tr>
-      <td>{{lock.id}}</td>
-      <td>{{lock.original_file_name}}</td>
-      <td>
-      {% if lock.locked_file %}
-        <a href="{{lock.locked_file.url}}">{{lock.locked_file_name}}</a><br />
-        [<a id="delete_file" href="{% url 'locks:delete_file' lock.id %}">Delete file</a>]
+<table class="table" style="margin-top:20px;">
+  <tr>
+    <th>Original file name</th>
+    <th>Locked file</th>
+    <th>Locked at</th>
+    <th>Until unlockable</th>
+    <th>Saved hours</th>
+  </tr>
+{% for lock in locks %}
+  <tr>
+    <td>{{lock.original_file_name}}</td>
+    <td>
+    {% if lock.locked_file %}
+      <a href="{{lock.locked_file.url}}">{{lock.locked_file_name}}</a><br />
+      [<a id="delete_file-{{lock.id}}" href="{% url 'locks:delete_file' lock.id %}">Delete file</a>]
+      <script>
+        $a.attachConfirmation('delete_file-{{lock.id}}', 'Are you sure you want it?');
+      </script>
+    {% else %}
+      <span class="inactive">{{lock.locked_file_name}}</span>
+    {% endif %}
+    </td>
+    <td>{{lock.locked_at|date:"Y/m/d"}}<br />{{lock.locked_at|time:"H:i:s"}}</td>
+    <td>
+    {% if lock.is_unlockable %}
+      {% if lock.unlocked_at %}
+        Password:<br />
+        [{{lock.password}}]
+      {% else %}
+        [<a id="unlock_file-{{lock.id}}" href="{% url 'locks:unlock_file' lock.id %}">Unlock</a>]
         <script>
-          $a.attachConfirmation('delete_file', 'Are you sure you want it?');
+          $a.attachConfirmation(
+            'unlock_file-{{lock.id}}',
+            'Are you sure you want it?\nRecollect a reason that you used this site!'
+          );
         </script>
-      {% else %}
-        <span class="inactive">{{lock.locked_file_name}}</span>
       {% endif %}
-      </td>
-      <td>{{lock.locked_at|date:"Y/m/d"}}<br />{{lock.locked_at|time:"H:i:s"}}</td>
-      <td>
-      {% if lock.is_unlockable %}
-        {% if lock.unlocked_at %}
-          Password:<br />
-          [{{lock.password}}]
-        {% else %}
-          [<a id="unlock_file" href="{% url 'locks:unlock_file' lock.id %}">Unlock</a>]
-          <script>
-            $a.attachConfirmation('unlock_file', 'Are you sure you want it?\nRecollect a reason that you used this site!');
-          </script>
-        {% endif %}
-      {% else %}
-        {{lock.unlockable_at|timeuntil}}
-      {% endif %}
-      </td>
-      <td>+{{lock.saved_hours}}</td>
-    </tr>
-  {% endfor %}
-  </table>
-</div>
+    {% else %}
+      {{lock.unlockable_at|timeuntil}}
+    {% endif %}
+    </td>
+    <td>+{{lock.saved_hours}}</td>
+  </tr>
+{% endfor %}
+</table>
 {% endif %}
+
 {% endblock %}

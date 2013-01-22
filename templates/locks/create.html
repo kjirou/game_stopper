@@ -3,7 +3,7 @@
 
 {% block nav_locks_class %}active{% endblock %}
 
-{% block container %}
+{% block page_body %}
 <h1>Lock your file</h1>
 <form action="{% url 'locks:create' %}" method="post"
   enctype="multipart/form-data">
