@@ -174,6 +174,8 @@ LOGGING = {
     }
 }
 
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 365
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'twauthorizer.backends.TwitterIdBackend',
