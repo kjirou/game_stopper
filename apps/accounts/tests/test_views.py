@@ -19,15 +19,15 @@ class SignUpViewTest(TestCase):
         UserProfile.objects.all().delete()
         User.objects.all().delete()
 
-    def test_complete_signed_up(self):
-        u'''登録完了'''
-        username = 'testuser'
-        response = self.client.post(reverse('accounts:sign_up'), {
-            'username': username,
-            'password': 'testpw',
-        })
-        UserProfile.objects.get(user__username=username)
-        self.assertEqual(UserProfile.objects.all().count(), 1)
+    #def test_complete_signed_up(self):
+    #    u'''登録完了'''
+    #    username = 'testuser'
+    #    response = self.client.post(reverse('accounts:sign_up'), {
+    #        'username': username,
+    #        'password': 'testpw',
+    #    })
+    #    UserProfile.objects.get(user__username=username)
+    #    self.assertEqual(UserProfile.objects.all().count(), 1)
 
     # マイページなどのログインが必要なページを開いて
     # status_codeで判別するらしい、のでその後でやる

@@ -4,7 +4,7 @@ import os, sys
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -15,7 +15,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': PROJECT_DIR + '/database.sqlite',
+        'NAME': PROJECT_ROOT + '/database.sqlite',
     },
     #'default': {
     #    'ENGINE': 'django.db.backends.mysql',
@@ -62,7 +62,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = PROJECT_DIR + '/media/'
+MEDIA_ROOT = PROJECT_ROOT + '/media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -123,7 +123,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    PROJECT_DIR + '/templates',
+    PROJECT_ROOT + '/templates',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -209,7 +209,7 @@ WEB_SERVER = 'development'
 TWAUTHORIZER_CONSUMER_KEY = ''
 TWAUTHORIZER_CONSUMER_SECRET = ''
 
-TMP_ROOT = PROJECT_DIR + '/tmp'
+TMP_ROOT = PROJECT_ROOT + '/tmp'
 FILELOCKER_WORKING_ROOT = TMP_ROOT + '/filelocker'
 
 LOCKED_FILES_DIR_NAME = 'locked_files'
