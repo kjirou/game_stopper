@@ -44,6 +44,17 @@ class LockManager(models.Manager):
         fl.clean()
         return obj
 
+    def sum_saved_hours(self, period=None):
+        u'''period is number of days from now to the past
+          for including aggregation'''
+        qs = self.all()
+        if period is not None:
+            now = django_now()
+            in_period = now - datetime.timedelta(days=period)
+            qs = qs.filter(locked_at__gt=in_period)
+        result = qs.aggregate(models.Sum('saved_hours'))
+        return result['saved_hours__sum'] or 0
+
 
 def _locked_file_upload_to(instance, filename):
     now = django_now()

@@ -91,3 +91,37 @@ class LockTest(TestCase):
         lock_obj.unlockable_at = pre
         lock_obj.save()
         self.assertTrue(lock_obj.is_unlockable())
+
+    def test_sum_saved_hours(self):
+        u'''sum_saved_hoursの確認'''
+
+        user_profile = self._create_user_profile()
+        now = django_now()
+
+        def _create_lock(before, saved_hours):
+            return Lock.objects.create(
+                user_profile=user_profile,
+                locked_file_name='dummy',
+                original_file_name='dummy',
+                original_file_size=1,
+                password='dummy',
+                locked_at=before,
+                unlockable_at=before + datetime.timedelta(days=1),
+                saved_hours=saved_hours
+            )
+
+        # 行無し
+        self.assertEqual(Lock.objects.sum_saved_hours(), 0)
+
+        # 1日間未満のものを追加
+        before = now - datetime.timedelta(days=1, seconds=-1)
+        _create_lock(before, 1)
+        _create_lock(before, 2)
+        self.assertEqual(Lock.objects.sum_saved_hours(), 3)
+        self.assertEqual(Lock.objects.sum_saved_hours(period=1), 3)
+
+        # 加えて、2日間のものを追加
+        before = now - datetime.timedelta(days=2)
+        _create_lock(before, 3)
+        self.assertEqual(Lock.objects.sum_saved_hours(), 6)
+        self.assertEqual(Lock.objects.sum_saved_hours(period=1), 3)  # 二日前のものは含まれない
