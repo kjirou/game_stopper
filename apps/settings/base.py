@@ -138,6 +138,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     # Additions
     'core.context_processors.urls_and_paths',
+    'locks.context_processors.file_infos',
 )
 
 INSTALLED_APPS = (
