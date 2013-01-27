@@ -1,4 +1,4 @@
-# coding: utf8
+# coding: utf-8
 from django.contrib import admin
 from django.core.urlresolvers import reverse
 from accounts.models import UserProfile
