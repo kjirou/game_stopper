@@ -27,12 +27,10 @@
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
           <li class="{% block nav_home_class %}{% endblock %}"><a href="{% url core:index %}">Home</a></li>
-          <li><a href="{% url core:index %}#about">About</a></li>
         {% if user.is_authenticated %}
           <li class="{% block nav_locks_class %}{% endblock %}"><a href="{% url locks:index %}">Locks</a></li>
           <li><a href="{% url accounts:logout %}">{% trans "Sign out" %}</a></li>
         {% else %}
-          {#<li class="{% block nav_sign_up_class %}{% endblock %}"><a href="{% url accounts:sign_up %}">Sign up</a></li>#}
           <li class="{% block nav_login_class %}{% endblock %}"><a href="{% url accounts:login %}">Sign in</a></li>
         {% endif %}
         </ul>
@@ -47,7 +45,7 @@
       <hr>
 
       <div class="footer">
-        <p>&copy; Company 2013</p>
+        <p>&copy; kjirou 2013</p>
       </div>
 
     </div><!-- /container -->
