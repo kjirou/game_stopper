@@ -1,4 +1,4 @@
-# coding: utf8
+# coding: utf-8
 import tweepy
 from django.conf import settings
 from django.contrib.auth import authenticate, login
